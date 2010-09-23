@@ -11,4 +11,7 @@
 <string name="eula_title">License</string>
 <string name="eula_accept">Accept</string>
 <string name="eula_refuse">Refuse</string>
+<string name="unknownBornDate">Unknown born date!</string>
+<string name="birtdayList">Birthdays List</string>
+<string name="noBirtdayList">Unknown Birthdays</string>
 </resources>

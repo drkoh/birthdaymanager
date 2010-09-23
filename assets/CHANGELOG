@@ -2,7 +2,14 @@
 Birthday Manager - ChangeLog                          http://www.marcoduff.com/
 -------------------------------------------------------------------------------
 
-Changes to version code 1 - 1.0 BETA (September 22, 2010):
+Changes to version code 1 - 1.1 (September 23, 2010):
+
+  - Lista dei contatti che non hanno impostato un compleanno;
+  - Migliorie grafiche;
+  - Diminuito il min SDK alle API 7;
+  - Bug fix.
+
+Changes to version code 1 - 1.0 (September 22, 2010):
 
   - Primo rilascio.
 

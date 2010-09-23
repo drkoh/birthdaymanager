@@ -20,22 +20,28 @@ package com.marcoduff.birthdaymanager.util;
 import java.util.Comparator;
 import java.util.Map;
 
-import com.marcoduff.birthdaymanager.BirthdayManager;
-
 /**
  * Classe per effettuare il confronto tra due elementi della mappa dei compleanni.
  * 
  * @author Marco Palermo (http://www.marcoduff.com/)
  */
-public class BirthdayComparator implements Comparator<Map<String, Object>>{
+public class BirthdayComparator implements Comparator<Map<String, String>>{
 	@Override
-	public int compare(Map<String, Object> object1, Map<String, Object> object2) {
-		Long diff1 = (Long)object1.get(BirthdayManager.NEXT_BIRTHDAY_IN_DAYS);
-		Long diff2 = (Long)object2.get(BirthdayManager.NEXT_BIRTHDAY_IN_DAYS);
-		int diff = diff1.compareTo(diff2);
+	public int compare(Map<String, String> object1, Map<String, String> object2) {
+		boolean hasBornDate1 = object1.get(AdapterUtils.BORN_DATE)!=null;
+		boolean hasBornDate2 = object2.get(AdapterUtils.BORN_DATE)!=null;
+		int diff;
+		if(hasBornDate1&&hasBornDate2) {
+			Long diff1 = Long.parseLong(object1.get(AdapterUtils.NEXT_BIRTHDAY_IN_DAYS));
+			Long diff2 = Long.parseLong(object2.get(AdapterUtils.NEXT_BIRTHDAY_IN_DAYS));
+			diff = diff1.compareTo(diff2);
+		}
+		else if(!hasBornDate1&&!hasBornDate2) diff = 0;
+		else if(hasBornDate1) return -1;
+		else return 1;
 		if(diff==0) {
-			String name1 = (String)object1.get(BirthdayManager.DISPLAY_NAME);
-			String name2 = (String)object1.get(BirthdayManager.DISPLAY_NAME);
+			String name1 = (String)object1.get(AdapterUtils.DISPLAY_NAME);
+			String name2 = (String)object2.get(AdapterUtils.DISPLAY_NAME);
 			return name1.compareTo(name2);
 		}
 		else return diff;

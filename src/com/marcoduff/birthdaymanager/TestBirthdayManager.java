@@ -17,15 +17,18 @@
  */
 package com.marcoduff.birthdaymanager;
 
-import android.app.Activity;
-import android.provider.ContactsContract;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import com.marcoduff.birthdaymanager.model.BirthdayContact;
 
 /**
  * Classe per effettuare dei test sopratutto dall'emulatore dell'SDK.
  * 
  * @author Marco Palermo (http://www.marcoduff.com/)
+ * @version 1.1
  */
-public class TestBirthdayManager extends BirthdayManager {
+public class TestBirthdayManager implements BirthdayManager {
 	private static final String[][] NAME_BORNS = new String[][] {
 		new String[] {"MarcoDuff",		"1979-10-03"},
 		new String[] {"MyLove",			"1978-10-13"},
@@ -36,65 +39,34 @@ public class TestBirthdayManager extends BirthdayManager {
 		new String[] {"Minnie",			"1928-05-15"},
 		new String[] {"Pluto",			"1930-08-18"},
 		new String[] {"Wikipedia",		"2001-01-15"},
+		new String[] {"Sun",			""},
+		new String[] {"Universe",		""},
 	};
-	private int currentIndex;
 	
 	/**
 	 * Costruisce un {@link BirthdayManager} di default per effettuare i test.
 	 * 
-	 * @param activity
+	 * @since 1.1
 	 */
-	public TestBirthdayManager(Activity activity) {
-		super(activity);
-		currentIndex = -1;
+	public TestBirthdayManager() {
 	}
 	
 	/**
-	 * Restituisce la data di nascita.
+	 * Restituisce la collezione dei contatti.
+	 * 
+	 * @return La collezione dei contatti.
+	 * @since 1.1
 	 */
 	@Override
-	protected String getBornDate() {
-		return NAME_BORNS[currentIndex][1];
-	}
-
-	/**
-	 * Restituisce l'id relativo a {@link ContactsContract.RawContacts}.
-	 */
-	@Override
-	protected String getRawId() {
-		return "1";
-	}
-	
-	/**
-	 * Restituisce il nome del contatto.
-	 */
-	@Override
-	protected String getName() {
-		return NAME_BORNS[currentIndex][0];
-	}
-
-	/**
-	 * Muove l'iteratore al prossimo elemento.
-	 */
-	@Override
-	protected boolean moveToNext() {
-		currentIndex++;
-		return currentIndex<NAME_BORNS.length;
-	}
-
-	/**
-	 * Inizia l'iterazione.
-	 */
-	@Override
-	protected void startIteration() {
-		currentIndex = -1;
-	}
-
-	/**
-	 * Finisce l'iterazione.
-	 */
-	@Override
-	protected void stopIteration() {
-		currentIndex = NAME_BORNS.length;
+	public Collection<BirthdayContact> getBirthdayContactCollection() {
+		Collection<BirthdayContact> contactsCollection = new ArrayList<BirthdayContact>(); 
+		for(int i=0;i<NAME_BORNS.length;i++) {
+			String displayName = NAME_BORNS[i][0];
+			String bornDate = NAME_BORNS[i][1];
+			BirthdayContact birthdayContact = new BirthdayContact(i,displayName);
+			if(bornDate.length()>0) birthdayContact.setBornDate(bornDate);
+			contactsCollection.add(birthdayContact);			
+		}
+		return contactsCollection;
 	}
 }

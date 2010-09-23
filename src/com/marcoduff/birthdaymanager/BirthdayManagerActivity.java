@@ -17,32 +17,35 @@
  */
 package com.marcoduff.birthdaymanager;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import com.marcoduff.birthdaymanager.R;
+import com.marcoduff.birthdaymanager.model.BirthdayContact;
+import com.marcoduff.birthdaymanager.util.AdapterUtils;
 import com.marcoduff.birthdaymanager.util.Eula;
 
-import android.app.Activity;
+import android.app.TabActivity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.ContactsContract.RawContacts;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TabHost;
 
 /**
  * Activity che si occupa della visualizzazione della lista dei compleanni.
  * 
  * @author Marco Palermo (http://www.marcoduff.com/)
+ * @version 1.1
  */
-public class BirthdayManagerActivity extends Activity {
-	private static final boolean IS_EMULATOR = true;
+public class BirthdayManagerActivity extends TabActivity {
+	private static final boolean IS_TEST = false;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,46 +53,52 @@ public class BirthdayManagerActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        ListView mBirthdayList = (ListView)findViewById(R.id.birthdayList);
+        TabHost tabHost = this.getTabHost();
+        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getString(R.string.birtdayList)).setContent(R.id.tab1));
+        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator(getString(R.string.noBirtdayList)).setContent(R.id.tab2));
+        
         
         BirthdayManager birthdayManager;
-        if(!IS_EMULATOR) {
+        if(!IS_TEST) {
         	birthdayManager = new CursorBirthdayManager(this);
         }
         else {
-        	birthdayManager = new TestBirthdayManager(this);
+        	birthdayManager = new TestBirthdayManager();
         }
         
-        final List<Map<String,Object>> data = birthdayManager.getContactList();
+        Collection<BirthdayContact> birtdayCollection = birthdayManager.getBirthdayContactCollection();
+        initListView(R.id.birthdayList, birtdayCollection, true);
+        initListView(R.id.noBirthdayList, birtdayCollection, false);
+    }
+    
+    private void initListView(int listViewId, Collection<BirthdayContact> birtdayCollection, boolean withBirthday) {
+        int resource = (withBirthday?android.R.layout.simple_list_item_2:android.R.layout.simple_list_item_1);
+    	String[] from = (withBirthday?new String[] {AdapterUtils.DISPLAY_NAME, AdapterUtils.NEXT_BIRTHDAY_DESCRIPTION}:new String[] {AdapterUtils.DISPLAY_NAME});
+    	int[] to = (withBirthday?new int[] {android.R.id.text1, android.R.id.text2}:new int[] {android.R.id.text1});
         
-        ListAdapter listAdapter = new SimpleAdapter(
-        		this,
-        		data,
-        		android.R.layout.simple_list_item_2,
-        		new String[] {BirthdayManager.DISPLAY_NAME, BirthdayManager.NEXT_BIRTHDAY_STRING},
-        		new int[] {android.R.id.text1, android.R.id.text2});
-        mBirthdayList.setAdapter(listAdapter);
-        mBirthdayList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Map<String,Object> map = data.get(position);
-				String rawId = (String)map.get(BirthdayManager.RAW_ID);
-				
-				Cursor c = BirthdayManagerActivity.this.managedQuery(
-						RawContacts.CONTENT_URI,
-						new String[]{RawContacts.CONTACT_ID},
-						RawContacts._ID+" = ?",
-						new String[]{rawId},
-						null);
-				
-				BirthdayManagerActivity.this.startManagingCursor(c);
-				if(c.moveToNext()) {
-					Uri contactUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, c.getString(c.getColumnIndex(RawContacts.CONTACT_ID)));
-					Intent intent = new Intent(Intent.ACTION_VIEW,contactUri);
-					BirthdayManagerActivity.this.startActivity(intent);
-				}
-				BirthdayManagerActivity.this.stopManagingCursor(c);
-			}
-		});
+    	List<Map<String,String>> mListAdapterMap = AdapterUtils.getListAdapterMap(this, birtdayCollection, withBirthday);
+        ListAdapter listAdapter = new SimpleAdapter(this,mListAdapterMap,resource,from,to);
+        ListView listView = (ListView)findViewById(listViewId);
+        listView.setAdapter(listAdapter);
+        listView.setOnItemClickListener(new MyItemClickListener(mListAdapterMap));
+    }
+    
+    private class MyItemClickListener implements AdapterView.OnItemClickListener {
+    	List<Map<String, String>> listAdapterMap;
+    	
+		public MyItemClickListener(List<Map<String, String>> listAdapterMap) {
+			this.listAdapterMap = listAdapterMap;
+		}
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	        if(!IS_TEST) {
+				Map<String,String> map = listAdapterMap.get(position);
+				String contactId = (String)map.get(AdapterUtils._ID);
+				Uri contactUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, contactId);
+				Intent intent = new Intent(Intent.ACTION_VIEW,contactUri);
+				BirthdayManagerActivity.this.startActivity(intent);
+	        }
+		}   	
     }
 }

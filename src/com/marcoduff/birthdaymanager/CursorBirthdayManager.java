@@ -17,20 +17,27 @@
  */
 package com.marcoduff.birthdaymanager;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.marcoduff.birthdaymanager.model.BirthdayContact;
+
 import android.app.Activity;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Data;
+import android.provider.ContactsContract.RawContacts;
 import android.provider.ContactsContract.CommonDataKinds.Event;
 
 /**
  * Classe che si occupa della lettura dei contatti nel db del terminale.
  * 
  * @author Marco Palermo (http://www.marcoduff.com/)
+ * @version 1.1
  */
-public class CursorBirthdayManager extends BirthdayManager {
+public class CursorBirthdayManager implements BirthdayManager {
 	private Activity activity;
-	private Cursor cursor;
 	
 	/**
 	 * Costruisce un {@link BirthdayManager} per il recupero dei contatti tramite cursore.
@@ -38,68 +45,59 @@ public class CursorBirthdayManager extends BirthdayManager {
 	 * @param activity
 	 */
 	public CursorBirthdayManager(Activity activity) {
-		super(activity);
 		this.activity = activity;
-		this.cursor = null;
 	}
-	
+
 	/**
-	 * Inizia l'iterazione.
+	 * Restituisce la collezione dei contatti.
+	 * 
+	 * @return La collezione dei contatti.
+	 * @since 1.1
 	 */
 	@Override
-	protected void startIteration() {
+	public Collection<BirthdayContact> getBirthdayContactCollection() {
+		Map<Long, BirthdayContact> contactsMap = new HashMap<Long, BirthdayContact>(); 
     	String[] projection = new String[] {
-    			Data._ID,
-    			Data.RAW_CONTACT_ID,
-    			Data.DISPLAY_NAME,
+    			ContactsContract.Contacts._ID,
+    			ContactsContract.Contacts.DISPLAY_NAME,
+    			ContactsContract.Contacts.IN_VISIBLE_GROUP,
+    	};
+		Cursor cursor = activity.managedQuery(
+    			ContactsContract.Contacts.CONTENT_URI,
+    			projection,
+    			null,
+    			null,
+    			null);
+		activity.startManagingCursor(cursor);
+		while(cursor.moveToNext()) {
+			long id = cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+			String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+			boolean isVisible = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.IN_VISIBLE_GROUP))==1;
+			if(isVisible) contactsMap.put(new Long(id), new BirthdayContact(id,displayName));
+		}
+		activity.stopManagingCursor(cursor);
+		updateBirthdayContact(contactsMap);
+		return contactsMap.values();
+	}
+	
+	private void updateBirthdayContact(Map<Long, BirthdayContact> contactsMap) {
+    	String[] projection = new String[] {
+    			RawContacts.CONTACT_ID,
     			Data.DATA1
     	};
-    	cursor = activity.managedQuery(
+    	Cursor cursor = activity.managedQuery(
     			ContactsContract.Data.CONTENT_URI,
     			projection,
     			Data.MIMETYPE +" = '"+Event.CONTENT_ITEM_TYPE+"' AND "+Data.DATA2+" = '"+Event.TYPE_BIRTHDAY+"'",
     			null,
     			null);
     	activity.startManagingCursor(cursor);
-    }
-
-	/**
-	 * Muove l'iteratore al prossimo elemento.
-	 */
-	@Override
-	protected boolean moveToNext() {
-		return cursor.moveToNext();
-	}
-
-	/**
-	 * Finisce l'iterazione.
-	 */
-	@Override
-	protected void stopIteration() {
+    	while(cursor.moveToNext()) {
+			long id = cursor.getLong(cursor.getColumnIndex(RawContacts.CONTACT_ID));
+			String bornDate = cursor.getString(cursor.getColumnIndex(Data.DATA1));
+    		BirthdayContact birthdayContact = contactsMap.get(new Long(id));
+    		birthdayContact.setBornDate(bornDate);
+    	}
     	activity.stopManagingCursor(cursor);
-	}
-
-	/**
-	 * Restituisce la data di nascita.
-	 */
-	@Override
-	protected String getBornDate() {
-		return cursor.getString(cursor.getColumnIndex(Data.DATA1));
-	}
-	
-	/**
-	 * Restituisce il nome del contatto.
-	 */
-	@Override
-	protected String getName() {
-		return cursor.getString(cursor.getColumnIndex(Data.DISPLAY_NAME));
-	}
-	
-	/**
-	 * Restituisce l'id relativo a {@link ContactsContract.RawContacts}.
-	 */
-	@Override
-	protected String getRawId() {
-		return cursor.getString(cursor.getColumnIndex(Data.RAW_CONTACT_ID));
 	}
 }
