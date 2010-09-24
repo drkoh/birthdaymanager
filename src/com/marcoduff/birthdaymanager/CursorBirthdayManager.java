@@ -23,7 +23,7 @@ import java.util.Map;
 
 import com.marcoduff.birthdaymanager.model.BirthdayContact;
 
-import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Data;
@@ -37,15 +37,15 @@ import android.provider.ContactsContract.CommonDataKinds.Event;
  * @version 1.1
  */
 public class CursorBirthdayManager implements BirthdayManager {
-	private Activity activity;
+	private Context context;
 	
 	/**
 	 * Costruisce un {@link BirthdayManager} per il recupero dei contatti tramite cursore.
 	 * 
-	 * @param activity
+	 * @param context Il contesto della chiamata.
 	 */
-	public CursorBirthdayManager(Activity activity) {
-		this.activity = activity;
+	public CursorBirthdayManager(Context context) {
+		this.context = context;
 	}
 
 	/**
@@ -62,20 +62,19 @@ public class CursorBirthdayManager implements BirthdayManager {
     			ContactsContract.Contacts.DISPLAY_NAME,
     			ContactsContract.Contacts.IN_VISIBLE_GROUP,
     	};
-		Cursor cursor = activity.managedQuery(
+		Cursor cursor = context.getContentResolver().query(
     			ContactsContract.Contacts.CONTENT_URI,
     			projection,
     			null,
     			null,
     			null);
-		activity.startManagingCursor(cursor);
 		while(cursor.moveToNext()) {
 			long id = cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID));
 			String displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 			boolean isVisible = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.IN_VISIBLE_GROUP))==1;
 			if(isVisible) contactsMap.put(new Long(id), new BirthdayContact(id,displayName));
 		}
-		activity.stopManagingCursor(cursor);
+		cursor.close();
 		updateBirthdayContact(contactsMap);
 		return contactsMap.values();
 	}
@@ -85,19 +84,18 @@ public class CursorBirthdayManager implements BirthdayManager {
     			RawContacts.CONTACT_ID,
     			Data.DATA1
     	};
-    	Cursor cursor = activity.managedQuery(
+    	Cursor cursor = context.getContentResolver().query(
     			ContactsContract.Data.CONTENT_URI,
     			projection,
     			Data.MIMETYPE +" = '"+Event.CONTENT_ITEM_TYPE+"' AND "+Data.DATA2+" = '"+Event.TYPE_BIRTHDAY+"'",
     			null,
     			null);
-    	activity.startManagingCursor(cursor);
     	while(cursor.moveToNext()) {
 			long id = cursor.getLong(cursor.getColumnIndex(RawContacts.CONTACT_ID));
 			String bornDate = cursor.getString(cursor.getColumnIndex(Data.DATA1));
     		BirthdayContact birthdayContact = contactsMap.get(new Long(id));
     		birthdayContact.setBornDate(bornDate);
     	}
-    	activity.stopManagingCursor(cursor);
+    	cursor.close();
 	}
 }

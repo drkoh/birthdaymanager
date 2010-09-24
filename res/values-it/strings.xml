@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    
+<string name="today">Oggi</string>
+<string name="tomorrow">Domani</string>
+<string name="inaweek">Entro una settimana (tra %1$s giorni - %2$s)</string>
+<string name="inamonth">Entro un mese (tra %1$s giorni - %2$s)</string>
+<string name="inayear">Tra %1$s giorni - %2$s</string>
+<string name="date_format">dd MMM yyyy</string>
+<string name="eula_title">Licenza</string>
+<string name="eula_accept">Accetto</string>
+<string name="eula_refuse">Rifiuto</string>
+<string name="unknownBornDate">Data di nascita sconosciuta!</string>
+<string name="birtdayList">Compleanni</string>
+<string name="noBirtdayList">Sconosciuti</string>
+<string name="noBirthdaysToday">Nessun compleanno!</string>
+<string name="birthdaysToday">E\' il compleanno di %1$s.</string>
+</resources>

@@ -10,7 +10,10 @@
             </intent-filter>
         </activity>
 
-    </application>
+    <receiver android:name=".receiver.BirthdayCheckReceiver"><intent-filter><action android:name="com.marcoduff.birthdaymanager.ACTION_CHECK_BIRTHDAYS"></action>
+</intent-filter>
+</receiver>
+</application>
     <uses-sdk android:minSdkVersion="7"/>
 
 <uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>

@@ -14,4 +14,6 @@
 <string name="unknownBornDate">Unknown born date!</string>
 <string name="birtdayList">Birthdays List</string>
 <string name="noBirtdayList">Unknown Birthdays</string>
+<string name="noBirthdaysToday">No Birthdays Today!</string>
+<string name="birthdaysToday">It\'s birthday time for %1$s.</string>
 </resources>

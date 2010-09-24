@@ -17,15 +17,19 @@
  */
 package com.marcoduff.birthdaymanager;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import com.marcoduff.birthdaymanager.R;
 import com.marcoduff.birthdaymanager.model.BirthdayContact;
+import com.marcoduff.birthdaymanager.receiver.BirthdayCheckReceiver;
 import com.marcoduff.birthdaymanager.util.AdapterUtils;
 import com.marcoduff.birthdaymanager.util.Eula;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.net.Uri;
@@ -44,12 +48,12 @@ import android.widget.TabHost;
  * @author Marco Palermo (http://www.marcoduff.com/)
  * @version 1.1
  */
-public class BirthdayManagerActivity extends TabActivity {
-	private static final boolean IS_TEST = false;
+public class BirthdayManagerActivity extends TabActivity implements Eula.OnEulaAgreedTo {
+	public static final boolean IS_TEST = false;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	Eula.show(this);
+    	boolean acceptEula = Eula.show(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
@@ -69,6 +73,8 @@ public class BirthdayManagerActivity extends TabActivity {
         Collection<BirthdayContact> birtdayCollection = birthdayManager.getBirthdayContactCollection();
         initListView(R.id.birthdayList, birtdayCollection, true);
         initListView(R.id.noBirthdayList, birtdayCollection, false);
+        
+        if(acceptEula) initAlarmManager();
     }
     
     private void initListView(int listViewId, Collection<BirthdayContact> birtdayCollection, boolean withBirthday) {
@@ -83,6 +89,27 @@ public class BirthdayManagerActivity extends TabActivity {
         listView.setOnItemClickListener(new MyItemClickListener(mListAdapterMap));
     }
     
+    private void initAlarmManager() {
+    	Calendar calendarTomorrow = Calendar.getInstance();
+    	calendarTomorrow.set(Calendar.HOUR_OF_DAY,0);
+    	calendarTomorrow.set(Calendar.MINUTE,0);
+    	calendarTomorrow.set(Calendar.SECOND,0);
+    	calendarTomorrow.set(Calendar.MILLISECOND,0);
+    	calendarTomorrow.add(Calendar.DAY_OF_MONTH, 1);
+    	long triggerAtTime = calendarTomorrow.getTimeInMillis();
+    	
+    	Intent intent = new Intent(BirthdayCheckReceiver.ACTION_CHECK_BIRTHDAYS);
+    	PendingIntent operation = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+    	
+    	AlarmManager alarmManager = (AlarmManager)this.getSystemService(ALARM_SERVICE);
+    	alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, triggerAtTime, AlarmManager.INTERVAL_DAY, operation);
+    }
+
+	@Override
+	public void onEulaAgreedTo() {
+		initAlarmManager();
+	}
+	
     private class MyItemClickListener implements AdapterView.OnItemClickListener {
     	List<Map<String, String>> listAdapterMap;
     	

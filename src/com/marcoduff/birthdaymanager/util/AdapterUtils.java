@@ -59,7 +59,7 @@ public class AdapterUtils {
 	/**
 	 * Indica la chiave della mappa che contiene la stringa esplicativa della data del prossimo anno del contatto.
 	 */
-	public static final String NEXT_BIRTHDAY_DESCRIPTION = "next_birthday_descriuption";
+	public static final String NEXT_BIRTHDAY_DESCRIPTION = "next_birthday_description";
 	/**
 	 * Indica la chiave della mappa che contiene un {@link Long} relativo al numero di giorni mancanti al compleanno.
 	 */

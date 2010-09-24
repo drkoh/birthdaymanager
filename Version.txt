@@ -4,10 +4,10 @@ Birthday Manager - ChangeLog                          http://www.marcoduff.com/
 
 Author:             Marco "Duff" Palermo (http://www.marcoduff.com)
 Version Code:       1
-Version Name:       1.0
-Min SDK version:    8
-Target SDK Version: 8
-Language:           en
+Version Name:       1.2
+Min SDK version:    7
+Target SDK Version: 7
+Language:           it, en
 License:            GNU General Public License v3
 App Icon by:        iconShock (http://www.iconshock.com/)
 

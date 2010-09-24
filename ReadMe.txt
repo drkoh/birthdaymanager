@@ -7,7 +7,9 @@ Birthday Manager - ChangeLog                          http://www.marcoduff.com/
   
   Principali caratteristiche:
   - Visualizza la lista ordinata dei prossimi compleanni dei contatti;
-  - Indica il numero di giorni mancanti al compleanno.
+  - Indica il numero di giorni mancanti al compleanno;
+  - Notifiche giornaliere per i compleanni;
+  - Lingue supportate: Inglese e Italiano.
   
   Il programma viene distribuito nella speranza che sia utile a qualcuno, ma
   senza alcuna garanzia.
