@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceCategory android:title="@string/notification_settings">
+<CheckBoxPreference android:key="@string/spkey_show_empty_birthday" android:title="@string/always_notify" android:summary="@string/always_notify_summary"></CheckBoxPreference><CheckBoxPreference android:key="@string/spkey_notification_led" android:title="@string/led_notify" android:summary="@string/led_notify_summary"></CheckBoxPreference>
+
+<CheckBoxPreference android:key="@string/spkey_notification_sound" android:title="@string/sound_notify" android:summary="@string/sound_notify_summary"></CheckBoxPreference><CheckBoxPreference android:key="@string/spkey_notification_vibrate" android:title="@string/vibrate_notify" android:summary="@string/vibrate_notify_summary"></CheckBoxPreference>
+
+</PreferenceCategory>
+</PreferenceScreen>

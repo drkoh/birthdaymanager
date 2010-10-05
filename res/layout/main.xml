@@ -23,7 +23,7 @@
 				<ListView
 					android:id="@+id/birthdayList"  
 					android:layout_width="fill_parent" 
-					android:layout_height="wrap_content" />
+					android:layout_height="wrap_content"/>
 			</LinearLayout>
 			<LinearLayout
 				android:orientation="vertical"

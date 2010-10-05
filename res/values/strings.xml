@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+    <string name="todayNotification">Show Today Notification</string>
     <string name="app_name">Birthday Manager</string>
-<string name="today">Today</string>
-<string name="tomorrow">Tomorrow</string>
-<string name="inaweek">In a week (%1$s days left - %2$s)</string>
-<string name="inamonth">In a month (%1$s days left - %2$s)</string>
-<string name="inayear">%1$s days left - %2$s</string>
-<string name="date_format">MMM dd, yyyy</string>
-<string name="eula_title">License</string>
-<string name="eula_accept">Accept</string>
-<string name="eula_refuse">Refuse</string>
-<string name="unknownBornDate">Unknown born date!</string>
-<string name="birtdayList">Birthdays List</string>
-<string name="noBirtdayList">Unknown Birthdays</string>
-<string name="noBirthdaysToday">No Birthdays Today!</string>
-<string name="birthdaysToday">It\'s birthday time for %1$s.</string>
+    <string name="version">1.3</string>
+	<string name="today">Today</string>
+	<string name="tomorrow">Tomorrow</string>
+	<string name="inaweek">In a week (%1$s days left - %2$s)</string>
+	<string name="inamonth">In a month (%1$s days left - %2$s)</string>
+	<string name="inayear">%1$s days left - %2$s</string>
+	<string name="date_format">MMM dd, yyyy</string>
+	<string name="eula_title">License</string>
+	<string name="eula_accept">Accept</string>
+	<string name="eula_refuse">Refuse</string>
+	<string name="unknownBornDate">Unknown born date!</string>
+	<string name="birtdayList">Birthdays List</string>
+	<string name="noBirtdayList">Unknown Birthdays</string>
+	<string name="noBirthdaysToday">No Birthdays Today!</string>
+	<string name="birthdaysToday">It\'s birthday time for %1$s.</string>
+	<string name="notification_settings">Notification settings</string>
+    <string name="vibrate_notify">Vibrate</string>
+    <string name="vibrate_notify_summary">Enable/disable vibrate notification.</string>
+    <string name="sound_notify">Sound</string>
+    <string name="sound_notify_summary">Enable/disable led notification.</string>
+    <string name="led_notify">Led</string>
+    <string name="led_notify_summary">Enable/disable led notification.</string>
+    <string name="always_notify">Always notify</string>
+    <string name="always_notify_summary">Will notify days without birtdays.</string>
+    <string name="menuSettings">Settings</string>
+    <string name="menuDonate">Donate</string>
+    <string name="menuAbout">About</string>
+    <string name="close">Close</string>
+	<string name="aboutMsg">Birthday Manager\nVersion %1$s\nby Marco Palermo\nandroid.marcoduff.com</string>
+	<string name="showSite">Show Site</string>
 </resources>

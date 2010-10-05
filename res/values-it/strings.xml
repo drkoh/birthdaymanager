@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-    
-<string name="today">Oggi</string>
-<string name="tomorrow">Domani</string>
-<string name="inaweek">Entro una settimana (tra %1$s giorni - %2$s)</string>
-<string name="inamonth">Entro un mese (tra %1$s giorni - %2$s)</string>
-<string name="inayear">Tra %1$s giorni - %2$s</string>
-<string name="date_format">dd MMM yyyy</string>
-<string name="eula_title">Licenza</string>
-<string name="eula_accept">Accetto</string>
-<string name="eula_refuse">Rifiuto</string>
-<string name="unknownBornDate">Data di nascita sconosciuta!</string>
-<string name="birtdayList">Compleanni</string>
-<string name="noBirtdayList">Sconosciuti</string>
-<string name="noBirthdaysToday">Nessun compleanno!</string>
-<string name="birthdaysToday">E\' il compleanno di %1$s.</string>
+    <string name="todayNotification">Notifica di Oggi</string>
+	<string name="today">Oggi</string>
+	<string name="tomorrow">Domani</string>
+	<string name="inaweek">Entro una settimana (tra %1$s giorni - %2$s)</string>
+	<string name="inamonth">Entro un mese (tra %1$s giorni - %2$s)</string>
+	<string name="inayear">Tra %1$s giorni - %2$s</string>
+	<string name="date_format">dd MMM yyyy</string>
+	<string name="unknownBornDate">Data di nascita sconosciuta!</string>
+	<string name="birtdayList">Compleanni</string>
+	<string name="noBirtdayList">Sconosciuti</string>
+	<string name="noBirthdaysToday">Nessun compleanno!</string>
+	<string name="birthdaysToday">E\' il compleanno di %1$s.</string>
+	<string name="notification_settings">Impostazioni notifiche</string>
+    <string name="vibrate_notify">Vibrazione</string>
+    <string name="vibrate_notify_summary">Abilita/disabilita vibrazione notifica.</string>
+    <string name="sound_notify">Suono</string>
+    <string name="sound_notify_summary">Abilita/disabilita suono notifica.</string>
+    <string name="led_notify">Led</string>
+    <string name="led_notify_summary">Abilita/disabilita led notifica.</string>
+    <string name="always_notify">Notifica sempre</string>
+    <string name="always_notify_summary">Notifica anche i giorni senza compleanni.</string>
+    <string name="menuSettings">Impostazioni</string>
+    <string name="menuDonate">Donazione</string>
+    <string name="menuAbout">About</string>
+   	<string name="close">Chiudi</string>
+	<string name="aboutMsg">Birthday Manager\nVersione %1$s\nby Marco Palermo\nandroid.marcoduff.com</string>
+	<string name="showSite">Vai al Sito</string>
 </resources>

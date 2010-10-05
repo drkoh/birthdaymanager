@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="spkey_show_empty_birthday">spkey_show_empty_birthday</string>
+	<string name="spkey_notification_led">spkey_notification_led</string>
+	<string name="spkey_notification_vibrate">spkey_notification_vibrate</string>
+	<string name="spkey_notification_sound">spkey_notification_sound</string>
+</resources>

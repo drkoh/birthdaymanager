@@ -29,13 +29,17 @@ import com.marcoduff.birthdaymanager.R;
 import com.marcoduff.birthdaymanager.TestBirthdayManager;
 import com.marcoduff.birthdaymanager.model.BirthdayContact;
 import com.marcoduff.birthdaymanager.util.AdapterUtils;
+import com.marcoduff.birthdaymanager.util.AlarmManagerUtils;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 /**
  * Receiver dell'AlarmManager per le notifiche giornaliere dei compleanni.
@@ -48,6 +52,21 @@ public class BirthdayCheckReceiver extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		String action = intent.getAction();
+		
+		if(action.equals(ACTION_CHECK_BIRTHDAYS)) checkBirthdays(context);
+		else if(action.equals(Intent.ACTION_BOOT_COMPLETED)) {
+	        final SharedPreferences preferences = context.getSharedPreferences("eula", Activity.MODE_PRIVATE);
+	        if (preferences.getBoolean("eula.accepted", false)) {
+	        	AlarmManagerUtils.initAlarmManager(context);
+	        }
+		}
+	}
+
+	private void checkBirthdays(Context context) {
+        SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean showEmpty = defaultPreferences.getBoolean(context.getString(R.string.spkey_show_empty_birthday), false);
+
         BirthdayManager birthdayManager;
         if(!BirthdayManagerActivity.IS_TEST) {
         	birthdayManager = new CursorBirthdayManager(context);
@@ -67,19 +86,30 @@ public class BirthdayCheckReceiver extends BroadcastReceiver {
         		text.append(map.get(AdapterUtils.DISPLAY_NAME));
         	}
         }
-        CharSequence contentText;
-        if(text.length()==0) contentText = context.getString(R.string.noBirthdaysToday);
-        else contentText = String.format(context.getString(R.string.birthdaysToday), text);
-        
-        Notification notification = new Notification(R.drawable.icon, contentText, System.currentTimeMillis());
-        notification.defaults |= Notification.DEFAULT_LIGHTS;
-        CharSequence contentTitle = context.getString(R.string.app_name);
-        Intent notificationIntent = new Intent(context, BirthdayManagerActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-        notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+        if(text.length()>0||showEmpty) {
+            boolean withLed = defaultPreferences.getBoolean(context.getString(R.string.spkey_notification_led), false);
+            boolean withSound = defaultPreferences.getBoolean(context.getString(R.string.spkey_notification_sound), false);
+            boolean withVibrate = defaultPreferences.getBoolean(context.getString(R.string.spkey_notification_vibrate), false);
 
-        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notification);
+            CharSequence contentText;
+	        if(text.length()==0) contentText = context.getString(R.string.noBirthdaysToday);
+	        else contentText = String.format(context.getString(R.string.birthdaysToday), text);
+	        CharSequence contentTitle = context.getString(R.string.app_name);
+	        Intent notificationIntent = new Intent(context, BirthdayManagerActivity.class);
+	        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+	        
+	        Notification notification = new Notification(R.drawable.icon, contentText, System.currentTimeMillis());
+	        notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+	        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+	        if(withLed) {
+	        	notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+	        	notification.defaults |= Notification.DEFAULT_LIGHTS;
+	        }
+	        if(withSound) notification.defaults |= Notification.DEFAULT_SOUND;
+	        if(withVibrate) notification.defaults |= Notification.DEFAULT_VIBRATE;
+	
+	        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+	        notificationManager.notify(1, notification);
+        }
 	}
-
 }

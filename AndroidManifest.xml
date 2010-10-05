@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       android:versionCode="1"
-      package="com.marcoduff.birthdaymanager" android:versionName="1.1">
+      package="com.marcoduff.birthdaymanager" android:versionName="@string/version">
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="false">
         <activity android:label="@string/app_name" android:name=".BirthdayManagerActivity">
             <intent-filter>
@@ -12,9 +12,14 @@
 
     <receiver android:name=".receiver.BirthdayCheckReceiver"><intent-filter><action android:name="com.marcoduff.birthdaymanager.ACTION_CHECK_BIRTHDAYS"></action>
 </intent-filter>
+<intent-filter><action android:name="android.intent.action.BOOT_COMPLETED"></action>
+</intent-filter>
 </receiver>
+<activity android:name="BirthdayPreference"></activity>
 </application>
     <uses-sdk android:minSdkVersion="7"/>
 
 <uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
+<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
+<uses-permission android:name="android.permission.VIBRATE"></uses-permission>
 </manifest> 

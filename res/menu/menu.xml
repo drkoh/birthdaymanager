@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+
+<item android:icon="@drawable/ic_menu_preferences" android:id="@+id/menuPreferences" android:title="@string/menuSettings"></item>
+<item android:id="@+id/menuShowNotification" android:title="@string/todayNotification" android:icon="@android:drawable/ic_menu_today"></item><item android:id="@+id/menuDonate" android:title="@string/menuDonate" android:icon="@android:drawable/ic_menu_set_as"></item>
+<item android:id="@+id/menuAbout" android:title="@string/menuAbout" android:icon="@android:drawable/ic_menu_info_details"></item>
+
+</menu>
