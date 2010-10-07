@@ -119,7 +119,10 @@ public class BirthdayManagerActivity extends TabActivity implements Eula.OnEulaA
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case DIALOG_ABOUT: {
-			String message = String.format(this.getResources().getString(R.string.aboutMsg), this.getResources().getString(R.string.version));
+			String versionName;
+			try {versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;}
+			catch(Exception e) {versionName = "";}
+			String message = String.format(this.getResources().getString(R.string.aboutMsg), versionName);
 			return new AlertDialog.Builder(this)
 				.setTitle(R.string.menuAbout)
 				.setMessage(message)

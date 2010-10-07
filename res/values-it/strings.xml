@@ -25,6 +25,6 @@
     <string name="menuDonate">Donazione</string>
     <string name="menuAbout">About</string>
    	<string name="close">Chiudi</string>
-	<string name="aboutMsg">Birthday Manager\nVersione %1$s\nby Marco Palermo\nandroid.marcoduff.com</string>
+	<string name="aboutMsg">Birthday Manager\nVersione %1$s\nLicenze: GPLv3\nby Marco Palermo\nandroid.marcoduff.com</string>
 	<string name="showSite">Vai al Sito</string>
 </resources>

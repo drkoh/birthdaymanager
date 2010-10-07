@@ -94,7 +94,8 @@ public class CursorBirthdayManager implements BirthdayManager {
 			long id = cursor.getLong(cursor.getColumnIndex(RawContacts.CONTACT_ID));
 			String bornDate = cursor.getString(cursor.getColumnIndex(Data.DATA1));
     		BirthdayContact birthdayContact = contactsMap.get(new Long(id));
-    		birthdayContact.setBornDate(bornDate);
+    		if(birthdayContact!=null)
+    			birthdayContact.setBornDate(bornDate);
     	}
     	cursor.close();
 	}
